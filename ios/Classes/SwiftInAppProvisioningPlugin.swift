@@ -14,8 +14,12 @@ public class SwiftInAppProvisioningPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if(call.method == isPasskitAvailable) {
         result(inAppProvisioning.isPassKitAvailable())
-    } else {
-        result("Unknown method call")
+    } else if(call.method == initiateEnrollment) {
+        guard let args = call.arguments as? [String : Any] else {return}
+        let panToken = args["panTokenSuffix"] as! String
+        let name = args["holderName"] as! String
+        inAppProvisioning.initEnrollProcess(panTokenSuffix: panToken, holderName: name)
+        result(["data1" : "data", "data2" : "data"])
     }
   }
 }
