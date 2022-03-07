@@ -15,14 +15,12 @@ class InAppProvisioningEnrollment:NSObject {
         print("Initiating enrollment");
         guard let configuration = PKAddPaymentPassRequestConfiguration(encryptionScheme: .ECC_V2) else {
             print("InApp enrollment configuraton fails")
-//            showPassKitUnavailable(message: "InApp enrollment configuraton fails")
             return
         }
         configuration.cardholderName = holderName
         configuration.primaryAccountSuffix = panTokenSuffix
         guard let enrollViewController = PKAddPaymentPassViewController(requestConfiguration: configuration, delegate: self) else {
             print("InApp enrollment controller configuration fails")
-            // showPassKitUnavailable(message: "InApp enrollment controller configuration fails")
             return
         }
         
@@ -46,12 +44,26 @@ extension InAppProvisioningEnrollment: PKAddPaymentPassViewControllerDelegate {
         generateRequestWithCertificateChain certificates: [Data],
         nonce: Data, nonceSignature: Data,
         completionHandler handler: @escaping (PKAddPaymentPassRequest) -> Void) {
-        print("nonce")
-        print(nonce)
-        print("nonceSignature")
-        print(nonceSignature)
-        print("certificates")
-        print(certificates.count)
+        let nonceString: String = dataToJson(data: nonce)
+        let nonceSignatureString: String = dataToJson(data: nonceSignature)
+        let certificate: String = dataToJson(data: certificates[0])
+        let _data = [
+            "nonce" : nonceString,
+            "nonceSignature" : nonceSignatureString,
+            "certificate" : certificate
+        ];
+        channel?.invokeMethod(PASSVIEW_DATA, arguments: _data)
+    }
+    
+    private func dataToJson(data: Data) -> String {
+        do {
+            let jsonData = try JSONEncoder().encode(data)
+            let jsonString = String(data: jsonData, encoding: .utf8)!
+            return jsonString
+        } catch {
+            print(error)
+            return ""
+        }
     }
     
     func addPaymentPassViewController(
