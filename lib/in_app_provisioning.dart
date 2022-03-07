@@ -1,9 +1,5 @@
-import 'dart:async';
-import 'package:in_app_provisioning/method_channels/method_channel_handler.dart';
+library in_app_provisioning;
 
-class InAppProvisioning {
-  final MethodChannelHandler _channelHandler = MethodChannelHandler();
-
-  Future<bool?> get isPasskitAvailable async =>
-      _channelHandler.isPassKitAvailable;
-}
+export 'src/in_app_provisioning_handler.dart';
+export 'src/models/card_data.dart';
+export 'src/models/securize_data.dart';

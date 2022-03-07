@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:in_app_provisioning/in_app_provisioning.dart';
 
 void main() {
@@ -15,28 +14,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  InAppProvisioning provisioning = InAppProvisioning();
-  bool _canUsePassKit = false;
+  final InAppProvisioning _provisioning = InAppProvisioning();
+
+  late Future<bool> _canAccessPasskit;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    _canAccessPasskit = _checkForPassKit();
   }
 
-  Future<void> initPlatformState() async {
-    bool isPasskitAvailable;
-    try {
-      isPasskitAvailable = await provisioning.isPasskitAvailable ?? false;
-    } on PlatformException {
-      isPasskitAvailable = false;
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      _canUsePassKit = isPasskitAvailable;
-    });
+  Future<bool> _checkForPassKit() async {
+    return await _provisioning.isPasskitAvailable ?? false;
   }
 
   @override
@@ -47,9 +36,29 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text(_canUsePassKit
-              ? "This device can use Passkit"
-              : "This device cannot use passkit"),
+          child: FutureBuilder(
+            future: _canAccessPasskit,
+            builder: (_, snapshot) {
+              if(snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else {
+                bool _havePassKitAccess = snapshot.data as bool;
+                if(_havePassKitAccess) {
+                  return MaterialButton(
+                    child: const Text('Initiate'),
+                    onPressed: () {
+                      _provisioning.initiateCardEnrollment(CardData(
+                        panTokenSuffix: "2314",
+                        holderName: "Devarsh"
+                      ));
+                    },
+                  );
+                } else {
+                  return const Text('Cannot access passkit');
+                }
+              }
+            },
+          ),
         ),
       ),
     );
