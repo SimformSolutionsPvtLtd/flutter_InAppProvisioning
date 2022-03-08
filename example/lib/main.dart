@@ -13,19 +13,25 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  final InAppProvisioning _provisioning = InAppProvisioning();
+class _MyAppState extends State<MyApp> implements InAppProvisioningInterface {
+  late InAppProvisioning _provisioning;
 
   late Future<bool> _canAccessPasskit;
 
   @override
+  void initiateEnrollment(String? nonce, String? nonceSignature, String? certificate) {
+
+  }
+
+  @override
   void initState() {
     super.initState();
+    _provisioning = InAppProvisioning(this);
     _canAccessPasskit = _checkForPassKit();
   }
 
   Future<bool> _checkForPassKit() async {
-    return await _provisioning.isPasskitAvailable ?? false;
+    return await _provisioning.isPassKitAvailable();
   }
 
   @override
@@ -47,9 +53,9 @@ class _MyAppState extends State<MyApp> {
                   return MaterialButton(
                     child: const Text('Initiate'),
                     onPressed: () {
-                      _provisioning.initiateCardEnrollment(CardData(
+                      _provisioning.initiateEnrollment(CardData(
                         panTokenSuffix: "2314",
-                        holderName: "Devarsh"
+                        holderName: "Simform"
                       ));
                     },
                   );

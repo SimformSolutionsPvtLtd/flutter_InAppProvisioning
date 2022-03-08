@@ -1,21 +1,17 @@
-import 'dart:async';
-import 'package:in_app_provisioning/src/models/securize_data.dart';
-import 'package:in_app_provisioning/src/models/card_data.dart';
-import 'package:in_app_provisioning/src/method_channels/method_channel_handler.dart';
+import 'package:in_app_provisioning/in_app_provisioning.dart';
+import 'package:in_app_provisioning/src/platform_interface/interfaces/in_app_provisioning_platform.dart';
 
 class InAppProvisioning {
-  final MethodChannelHandler _channelHandler = MethodChannelHandler();
 
-  Future<bool?> get isPasskitAvailable async =>
-      _channelHandler.isPassKitAvailable;
-
-  Future<SecurizeData> initiateCardEnrollment(CardData data) async {
-    Map<String, dynamic>? _securizeMap = await _channelHandler.initiateEnrollment(data);
-    if(_securizeMap != null) {
-      return SecurizeData.fromMap(_securizeMap);
-    } else {
-      throw "Something went wrong";
-    }
+  InAppProvisioning(InAppProvisioningInterface interface) {
+    InAppProvisioningPlatform.instance.initialize(interface);
   }
 
+  Future<bool> isPassKitAvailable() async {
+    bool? isPassKitAvailable = await InAppProvisioningPlatform.instance.isPassKitAvailable();
+    return isPassKitAvailable ?? false;
+  }
+
+  Future<void> initiateEnrollment(CardData data) =>
+      InAppProvisioningPlatform.instance.initiateEnrollment(data);
 }
