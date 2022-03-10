@@ -3,17 +3,12 @@ import 'package:in_app_provisioning/src/platform_interface/method_channels/metho
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 abstract class InAppProvisioningPlatform extends PlatformInterface {
-
   InAppProvisioningPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-
-
-
-
-
-  static InAppProvisioningPlatform _instance = InAppProvisioningMethodChannels();
+  static InAppProvisioningPlatform _instance =
+      InAppProvisioningMethodChannels();
 
   static InAppProvisioningPlatform get instance => _instance;
 
