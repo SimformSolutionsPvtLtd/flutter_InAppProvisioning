@@ -39,4 +39,9 @@ class InAppProvisioningMethodChannels extends InAppProvisioningPlatform {
     return;
   }
 
+  @override
+  Future<void> passProvisioningPayload(ProvisioningPayload payload) async {
+    channel.invokeMapMethod(MethodChannels.provisioninigPayload, payload.toMap());
+  }
+
 }
