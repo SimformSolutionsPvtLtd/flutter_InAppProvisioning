@@ -1,6 +1,9 @@
 import UIKit
 import PassKit
 
+typealias CompletionHandler = (PKAddPaymentPassRequest) ->Void
+var completionHandler: CompletionHandler?
+
 class InAppProvisioningEnrollment:NSObject {
     
     var channel: FlutterMethodChannel?
@@ -27,6 +30,8 @@ class InAppProvisioningEnrollment:NSObject {
             return
         }
         
+        let frontViewController = UINavigationController(rootViewController: enrollViewController)
+        
         guard let window = UIApplication.shared.keyWindow, let rootViewController = window.rootViewController else {
                  return
              }
@@ -35,7 +40,7 @@ class InAppProvisioningEnrollment:NSObject {
              while let newTopController = topController.presentedViewController {
                  topController = newTopController
              }
-        topController.present(enrollViewController, animated: true, completion: nil)
+        topController.present(frontViewController, animated: true, completion: nil)
     }
     
     
@@ -47,6 +52,9 @@ extension InAppProvisioningEnrollment: PKAddPaymentPassViewControllerDelegate {
         generateRequestWithCertificateChain certificates: [Data],
         nonce: Data, nonceSignature: Data,
         completionHandler handler: @escaping (PKAddPaymentPassRequest) -> Void) {
+        
+        completionHandler = handler
+        
         let nonceString: String = dataToJson(data: nonce)
         let nonceSignatureString: String = dataToJson(data: nonceSignature)
         let certificate: String = dataToJson(data: certificates[0])
