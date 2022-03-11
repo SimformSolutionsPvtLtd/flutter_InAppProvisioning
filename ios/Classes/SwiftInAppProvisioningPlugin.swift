@@ -6,7 +6,7 @@ public class SwiftInAppProvisioningPlugin: NSObject, FlutterPlugin {
     
     var channel: FlutterMethodChannel?
     
-    let inAppProvisioning:InAppProvisioningEnrollment = InAppProvisioningEnrollment()
+    var inAppProvisioning:InAppProvisioningEnrollment?
     
   public static func register(with registrar: FlutterPluginRegistrar) {
     let _channel = FlutterMethodChannel(name: CHANNEL_NAME, binaryMessenger: registrar.messenger())
@@ -18,13 +18,14 @@ public class SwiftInAppProvisioningPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    inAppProvisioning = InAppProvisioningEnrollment(methodChannel: channel!)
     if(call.method == IS_PASSKIT_AVAILABLE) {
-        result(inAppProvisioning.isPassKitAvailable())
+        result(inAppProvisioning!.isPassKitAvailable())
     } else if(call.method == INIT_ENROLLMENT) {
         guard let args = call.arguments as? [String : Any] else {return}
         let panToken = args["panTokenSuffix"] as! String
         let name = args["holderName"] as! String
-        inAppProvisioning.initEnrollProcess(panTokenSuffix: panToken, holderName: name, methodChannel: channel!)
+        inAppProvisioning!.initEnrollProcess(panTokenSuffix: panToken, holderName: name)
         result(["" : ""])
     }
   }

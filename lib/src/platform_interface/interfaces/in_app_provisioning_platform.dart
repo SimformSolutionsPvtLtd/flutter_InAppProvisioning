@@ -28,4 +28,8 @@ abstract class InAppProvisioningPlatform extends PlatformInterface {
   Future<void> initiateEnrollment(CardData data) {
     throw UnimplementedError("initiateEnrollment() has not been implemented.");
   }
+
+  Future<void> passProvisioningPayload(ProvisioningPayload payload) {
+    throw UnimplementedError("passProvisioningPayload() has not been implemented.");
+  }
 }

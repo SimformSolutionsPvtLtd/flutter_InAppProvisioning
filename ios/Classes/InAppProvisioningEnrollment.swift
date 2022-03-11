@@ -5,14 +5,17 @@ class InAppProvisioningEnrollment:NSObject {
     
     var channel: FlutterMethodChannel?
     
+    init(methodChannel: FlutterMethodChannel) {
+        channel = methodChannel
+    }
+    
     // Method to determine is device eligible for payment pass.
     public func isPassKitAvailable() -> Bool {
         return PKAddPaymentPassViewController.canAddPaymentPass()
     }
     
     // Initiate card enrollment process using card holder name and
-    public func initEnrollProcess(panTokenSuffix: String, holderName: String, methodChannel: FlutterMethodChannel) {
-        channel = methodChannel
+    public func initEnrollProcess(panTokenSuffix: String, holderName: String) {
         guard let configuration = PKAddPaymentPassRequestConfiguration(encryptionScheme: .ECC_V2) else {
             print("InApp enrollment configuraton fails")
             return
