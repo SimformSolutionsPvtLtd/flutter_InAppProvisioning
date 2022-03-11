@@ -27,6 +27,16 @@ public class SwiftInAppProvisioningPlugin: NSObject, FlutterPlugin {
         let name = args["holderName"] as! String
         inAppProvisioning!.initEnrollProcess(panTokenSuffix: panToken, holderName: name)
         result(["" : ""])
+    } else if(call.method == PROVISIONING_PAYLOAD) {
+        guard let args = call.arguments as? [String : Any] else {return}
+        let activationData = args["activationData"] as! String
+        let ephemeralPublicKey = args["ephemeralPublicKey"] as! String
+        let encryptedPassData = args["encryptedPassData"] as! String
+        let request : PKAddPaymentPassRequest = PKAddPaymentPassRequest()
+        request.activationData = activationData.data(using: .utf8)
+        request.encryptedPassData = encryptedPassData.data(using: .utf8)
+        request.ephemeralPublicKey = ephemeralPublicKey.data(using: .utf8)
+        completionHandler!(request)
     }
   }
     

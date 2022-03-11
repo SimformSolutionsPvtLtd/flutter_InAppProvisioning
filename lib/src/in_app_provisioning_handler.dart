@@ -14,4 +14,7 @@ class InAppProvisioning {
 
   Future<void> initiateEnrollment(CardData data) =>
       InAppProvisioningPlatform.instance.initiateEnrollment(data);
+
+  Future<void> passProvisioningPayload(ProvisioningPayload payload) =>
+      InAppProvisioningPlatform.instance.passProvisioningPayload(payload);
 }
