@@ -1,0 +1,24 @@
+name: in_app_provisioning
+description: A new Flutter plugin for iOS in app provisioning.
+version: 0.0.1
+homepage: www.simform.com
+
+environment:
+  sdk: ">=2.14.3 <3.0.0"
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+  plugin_platform_interface: ^2.1.2
+
+flutter:
+  plugin:
+    platforms:
+      ios:
+        pluginClass: InAppProvisioningPlugin
