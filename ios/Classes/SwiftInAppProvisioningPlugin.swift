@@ -31,7 +31,7 @@ public class SwiftInAppProvisioningPlugin: NSObject, FlutterPlugin {
         guard let args = call.arguments as? [String : Any] else {return}
         let activationData = args["activationData"] as! String
         let ephemeralPublicKey = args["ephemeralPublicKey"] as! String
-        let encryptedPassData = args["encryptedPassData"] as! String
+        let encryptedPassData = args["encryptedData"] as! String
         let request : PKAddPaymentPassRequest = PKAddPaymentPassRequest()
         request.activationData = activationData.data(using: .utf8)
         request.encryptedPassData = encryptedPassData.data(using: .utf8)
