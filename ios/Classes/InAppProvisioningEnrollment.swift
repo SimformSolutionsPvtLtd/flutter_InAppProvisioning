@@ -7,6 +7,7 @@ var completionHandler: CompletionHandler?
 class InAppProvisioningEnrollment:NSObject {
     
     var channel: FlutterMethodChannel?
+    var topController : UIViewController?
     
     init(methodChannel: FlutterMethodChannel) {
         channel = methodChannel
@@ -35,12 +36,12 @@ class InAppProvisioningEnrollment:NSObject {
         guard let window = UIApplication.shared.keyWindow, let rootViewController = window.rootViewController else {
                  return
              }
-             var topController = rootViewController
+             topController = rootViewController
         
-             while let newTopController = topController.presentedViewController {
+             while let newTopController = topController!.presentedViewController {
                  topController = newTopController
              }
-        topController.present(frontViewController, animated: true, completion: nil)
+        topController!.present(frontViewController, animated: true, completion: nil)
     }
     
     
@@ -81,5 +82,6 @@ extension InAppProvisioningEnrollment: PKAddPaymentPassViewControllerDelegate {
         _ controller: PKAddPaymentPassViewController,
         didFinishAdding pass: PKPaymentPass?,
         error: Error?) {
+        topController!.dismiss(animated: true, completion: nil)
     }
 }
