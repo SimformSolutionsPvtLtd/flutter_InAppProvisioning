@@ -33,9 +33,9 @@ public class SwiftInAppProvisioningPlugin: NSObject, FlutterPlugin {
         let ephemeralPublicKey = args["ephemeralPublicKey"] as! String
         let encryptedPassData = args["encryptedData"] as! String
         let request : PKAddPaymentPassRequest = PKAddPaymentPassRequest()
-        request.activationData = activationData.data(using: .utf8)
-        request.encryptedPassData = encryptedPassData.data(using: .utf8)
-        request.ephemeralPublicKey = ephemeralPublicKey.data(using: .utf8)
+        request.activationData = Data(base64Encoded: activationData, options: [])
+        request.encryptedPassData = Data(base64Encoded: encryptedPassData, options: [])
+        request.ephemeralPublicKey = Data(base64Encoded: ephemeralPublicKey, options: [])
         completionHandler!(request)
     }
   }
